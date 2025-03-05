@@ -3,12 +3,14 @@ pipeline {
     stages {
         stage('Setup Environment') {
             steps {
-                // Install Poetry if not installed
                 sh '''
+                # Check if Poetry is installed
                 if ! command -v poetry &> /dev/null; then
                     echo "Poetry not found, installing..."
                     curl -sSL https://install.python-poetry.org | python3 -
                     export PATH="$HOME/.local/bin:$PATH"
+                    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+                    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.profile
                 fi
                 poetry --version
                 '''
@@ -35,6 +37,7 @@ pipeline {
             steps {
                 sh '''
                 export PATH="$HOME/.local/bin:$PATH"
+                source ~/.bashrc
                 poetry install --with dev
                 '''
             }
@@ -44,6 +47,7 @@ pipeline {
             steps {
                 sh '''
                 export PATH="$HOME/.local/bin:$PATH"
+                source ~/.bashrc
                 poetry run pytest
                 '''
             }
