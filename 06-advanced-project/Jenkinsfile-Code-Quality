@@ -1,6 +1,20 @@
 pipeline {
     agent any
     stages {
+        stage('Setup Environment') {
+            steps {
+                // Install Poetry if not installed
+                sh '''
+                if ! command -v poetry &> /dev/null; then
+                    echo "Poetry not found, installing..."
+                    curl -sSL https://install.python-poetry.org | python3 -
+                    export PATH="$HOME/.local/bin:$PATH"
+                fi
+                poetry --version
+                '''
+            }
+        }
+        
         stage('environment variables') {
             steps {
                 sh 'printenv'
@@ -16,15 +30,22 @@ pipeline {
                 echo "PR: ${CHANGE_ID}"
             }
         }            
+        
         stage('Setup') {
             steps {
-                sh "poetry install --with dev"
+                sh '''
+                export PATH="$HOME/.local/bin:$PATH"
+                poetry install --with dev
+                '''
             }
         }
 
         stage('Test') {
             steps {
-                sh "poetry run pytest"
+                sh '''
+                export PATH="$HOME/.local/bin:$PATH"
+                poetry run pytest
+                '''
             }
         }    
     }
