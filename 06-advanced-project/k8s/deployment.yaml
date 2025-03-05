@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask-app
-  namespace: development  # ✅ Ensure it matches
+  namespace: development  # ✅ Ensure the correct namespace
 spec:
   replicas: 3
   selector:
@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: neamulkabiremon/jenkins-flask-app:v4  # ✅ Updated image
+        image: ${IMAGE_TAG}  # ✅ Placeholder for dynamic substitution
         ports:
-        - containerPort: 8000  # ✅ Match Dockerfile
+        - containerPort: 8000  # ✅ Ensure it matches your Flask app
