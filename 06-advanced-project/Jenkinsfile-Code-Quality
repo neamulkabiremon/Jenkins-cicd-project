@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        POETRY_HOME = "$HOME/.local/bin"
+        PATH = "$POETRY_HOME:$PATH"
+    }
     stages {
         stage('Setup Environment') {
             steps {
@@ -12,6 +16,8 @@ pipeline {
                     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
                     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.profile
                 fi
+                source ~/.bashrc
+                source ~/.profile
                 poetry --version
                 '''
             }
@@ -38,6 +44,7 @@ pipeline {
                 sh '''
                 export PATH="$HOME/.local/bin:$PATH"
                 source ~/.bashrc
+                source ~/.profile
                 poetry install --with dev
                 '''
             }
@@ -48,6 +55,7 @@ pipeline {
                 sh '''
                 export PATH="$HOME/.local/bin:$PATH"
                 source ~/.bashrc
+                source ~/.profile
                 poetry run pytest
                 '''
             }
