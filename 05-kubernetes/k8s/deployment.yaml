@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask-app
+  namespace: development  # ✅ Ensure it matches
 spec:
   replicas: 3
   selector:
@@ -14,10 +15,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: sanjeevkt720/jenkins-flask-app:v3
-        # resources:
-        #   limits:
-        #     memory: "128Mi"
-        #     cpu: "100m"
+        image: neamulkabiremon/jenkins-flask-app:v4  # ✅ Updated image
         ports:
-        - containerPort: 5000
+        - containerPort: 8000  # ✅ Match Dockerfile
+
